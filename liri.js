@@ -14,24 +14,26 @@ var value = process.argv[3];
 
 
 //This switch case statment will call the functions depending in the users input
-switch(action){
-    case 'my-tweets':
-        mytweets();
-    break;
+function switchFunc() {
 
-    case 'spotify-this-song':
-        spotifythissong();
-    break;
+    switch(action){
+        case 'my-tweets':
+            mytweets();
+        break;
 
-    case 'movie-this':
-        moviethis();
-    break;
+        case 'spotify-this-song':
+            spotifythissong();
+        break;
 
-    case 'do-what-it-says':
-        dowhatitsays();
-    break;
+        case 'movie-this':
+            moviethis();
+        break;
+
+        case 'do-what-it-says':
+            dowhatitsays();
+        break;
+    }
 }
-
 
 //this will hold the movie function
 function moviethis() {
@@ -51,8 +53,9 @@ var queryUrl = 'http://www.omdbapi.com/?t=' + movieName +'&y=&plot=full&tomatoes
 //else, it should to return Mr.Nobody by default
 else {queryUrl = 'http://www.omdbapi.com/?t=' + 'Mr.Nobody' +'&y=&plot=full&tomatoes=true&r=json';
 
+    console.log("\n")
     console.log("If you haven't watched Mr. Nobody, then you should: http://www.imdb.com/title/tt0485947/")}
-    console.log("It's on Netflix!");
+    console.log("\nIt's on Netflix!");
 
 // Then create a request to the queryUrl, and return the desired data    
     request(queryUrl , function (error, response, data) {
@@ -61,15 +64,15 @@ if (!error &&response.statusCode == 200) {
 
 
     //This will console log all the required information for the movie    
-    console.log("Title of the movie: " + JSON.parse(data)['Title'] + 
-                "/nThe Release Year for the movie is: " + JSON.parse(data)['Year'] + 
-                "/nIMDB Rating of the movie: " + JSON.parse(data)['imdbRating'] + 
-                "/nCountry were the movie was produced: " + JSON.parse(data)['Country'] + 
-                "/nLanguage: " + JSON.parse(data)['Language'] +
-                "/nPlot of the movie: " + JSON.parse(data)['Plot'] +
-                "/nActors in the movie: " + JSON.parse(data)['Actors'] +
-                "/nRotten Tomatoes Rating: " + JSON.parse(data)['tomatoRating'] +
-                "/nRotten Tomatoes URL: " + JSON.parse(data)['tomatoURL']);
+    console.log("\nTitle of the movie: " + JSON.parse(data)['Title'] + "\n" +
+                "\nThe Release Year for the movie is: " + JSON.parse(data)['Year'] + "\n" +
+                "\nIMDB Rating of the movie: " + JSON.parse(data)['imdbRating'] + "\n" +
+                "\nCountry were the movie was produced: " + JSON.parse(data)['Country'] + "\n" +
+                "\nLanguage: " + JSON.parse(data)['Language'] + "\n" +
+                "\nPlot of the movie: " + JSON.parse(data)['Plot'] + "\n" +
+                "\nActors in the movie: " + JSON.parse(data)['Actors'] + "\n" +
+                "\nRotten Tomatoes Rating: " + JSON.parse(data)['tomatoRating'] + "\n" +
+                "\nRotten Tomatoes URL: " + JSON.parse(data)['tomatoURL']);
 
   } 
 })};
@@ -83,6 +86,7 @@ var spotify = require('spotify');
 //this variable iquals the value input from the user with the song to search
 var song = value;
  
+//this is part of the npm spotify, and will call the track and query to received the data 
 spotify.search({ type: 'track', query: song }, function(err, data) {
     if ( err ) {
         console.log('Error occurred: ' + err);
@@ -91,9 +95,9 @@ return;
         
       // console logs the data correspondent to the artist input by the user
       console.log("Artist: " + data.tracks.items[0].artists[0].name +
-                  "/nThis songs name: " + data.tracks.items[0].name + 
-                  "/nA preview link of the song from Spotify: " + data.tracks.items[0].album.external_urls.spotify +
-                  "/nAlbums name: " + data.tracks.items[0].album.name);
+                  "\nThis songs name: " + data.tracks.items[0].name + 
+                  "\nA preview link of the song from Spotify: " + data.tracks.items[0].album.external_urls.spotify +
+                  "\nAlbums name: " + data.tracks.items[0].album.name);
 
 
         });
@@ -117,10 +121,12 @@ function mytweets(){
 
             //with this foor loops it will go thru the numbers array and console.log the las 20 tweets and date of those
             for (i = 0; i < numbers.length; i++) { 
- 
-                console.log("\n")
-                console.log("tweets: " + tweets[i].text);
-                console.log("When this was created: " + tweets[i].created_at);
+                
+
+                //this will console.log the last 20 tweets and its dates
+                console.log("\n");
+                console.log("\ntweets: " + tweets[i].text);
+                console.log("\nWhen this was created: " + tweets[i].created_at);
                 console.log("\n-------------\n");
             }
         }
@@ -128,3 +134,31 @@ function mytweets(){
 
 
 };
+
+function dowhatitsays(){
+
+    var fs = require('fs');
+
+
+   fs.readFile("random.txt", "utf8", function(error, data) {
+
+    // We will then print the contents of data
+    
+    var dataArr = data.split(',');
+    action = dataArr[0];
+    value = dataArr[1];
+
+    switchFunc()
+
+
+    // Then split it by commas (to make it more readable)
+   
+    
+
+    // We will then re-display the content with the split for aesthetics.
+
+    })
+};
+
+
+switchFunc();
